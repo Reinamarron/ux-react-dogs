@@ -1,51 +1,60 @@
-import React from "react";
+import React, { Component } from "react";
 import Dog from "./components/Dog";
 import Header from "./components/Header";
 import "./App.css";
 
-class App extends React.Component{
+class App extends Component {
   state = { 
     dogs: [
     {
       name: "Scruffles",
-      type: "Chihuahua",
     },
     {
       name: "Snarf",
-      type: "Border Collie",
     },
     {
       name: "Wookie",
-      type: "English Sheepdog",
     },
   ],
-  favoriteDog: "",
+  newDogName: ""
   };
-   
-   pickNewFavorite() {
-    let newDogIndex = Math.floor(Math.random() * this.state.dogs.length);
-    return this.state.dogs[newDogIndex];
-  }
-onPickNewFavorite = ()=> {
-  this.setState({favoriteDog: this.pickNewFavorite()})
+
+  handleChange = (event) => {
+    console.log(event.target.value);
+    this.setState({newDogName: event.target.value});
+  };
+handleAdoptDog = event =>{
+  this.setState(state=>{
+    return{
+      dogs:[...state.dogs, {name: state.newDogName}],
+      newDogName: ""
+    }
+  })
+
 }
- 
  render(){
    return (
-     <div className="dogs">
+     <div className="app">
        <Header numDogs={this.state.dogs.length} />
        <h2>My Dogs</h2>
-       <div>
-         {this.state.dogs.map((dog) => (
-           <Dog dog={dog} />
+       <ul className="dogList">
+         {this.state.dogs.map((dog, index) => (
+           <li key={index}>
+             <Dog dog={dog} />
+           </li>
          ))}
+       </ul>
+       <br />
+       <div>
+       <input type="text" 
+       onChange={this.handleNewDogChange}
+       value={this.state.newDogName}
+       />
+         <button onClick={this.handleAdoptDog}>Adopt a dog</button>
+           </div>
        </div>
-       <button onClick={this.onPickNewFavorite}>Pick new favorite</button>
-       <h2>My Favorite dog is {this.state.favoriteDog.name}</h2>
-     </div>
    );
  }
-
 }
 
 export default App;
